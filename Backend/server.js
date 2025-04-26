@@ -16,7 +16,7 @@ const __dirname = path.dirname(__filename);
 app.use(cors({
   origin: ["https://medivista.vercel.app", 
            credentials: true
-  }));,
+  }));
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 }));
