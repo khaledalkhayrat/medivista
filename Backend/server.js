@@ -14,9 +14,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(cors({
-  origin: ['http://localhost:5173',
-           'https://medivista-ym47.vercel.app' 
-  ],
+  origin: ["https://medivista.vercel.app", 
+           credentials: true
+  }));,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 }));
