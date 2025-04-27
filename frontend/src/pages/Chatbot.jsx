@@ -16,7 +16,7 @@ const Chatbot = () => {
       const res = await axios.post("https://medivista-1.onrender.com/api/ai/ask", {
         message: newMessage,
       });
-      const aiReply = { role: "assistant", content: res.data.response }; // ✅ fixed key
+      const aiReply = { role: "assistant", content: res.data.reply }; // ✅ fixed key
       setMessages([...updatedMessages, aiReply]);
     } catch (error) {
       setMessages([
