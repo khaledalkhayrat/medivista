@@ -15,7 +15,7 @@ const ChatGPT = () => {
     setInput('');
 
     try {
-      const res = await axios.post('https://medivista-1.onrender.com/api/ai/ask', {   // 🔥 Changed URL here
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/ai/ask`, {
         message: newMessages.map(m => `${m.role === 'user' ? 'User' : 'AI'}: ${m.content}`).join('\n')
       });
 
@@ -36,7 +36,7 @@ const ChatGPT = () => {
     formData.append('file', file);
 
     try {
-      const res = await axios.post('https://medivista-1.onrender.com/api/ai/upload', formData); // 🔥 Changed URL here
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/ai/upload`, formData);
       const reply = res?.data?.reply || "⚠️ No response from AI.";
       setMessages([...messages, { role: 'assistant', content: reply }]);
     } catch (error) {
@@ -122,5 +122,3 @@ const ChatGPT = () => {
 };
 
 export default ChatGPT;
-
-
