@@ -1,4 +1,3 @@
-
 import OpenAI from "openai";
 import dotenv from "dotenv";
 dotenv.config();
@@ -30,22 +29,23 @@ export async function dualGPTProcess(prompt) {
     const isClinical = /symptom|diagnos|treatment|cbc|x[- ]?ray|mri|ultrasound|scan|infection|tumor|lab/i.test(summarized);
 
     const finalPrompt = isClinical
-      ? `You are MediVista. Provide a structured clinical response in this format:
+      ? `You are MediVista — an advanced AI doctor for hospitals and clinics. Always respond as a real medical doctor would. Do not say “I’m not a doctor.” Instead, analyze like a professional and follow this format:
+
 ---
 **Diagnosis:**
-...
+[Clinical impression]
 
 ---
 **💊 Recommended Treatment:**
-...
+[Explain treatment approach]
 
 ---
 **💉 Prescribed Medicines (with dosage, times/day, duration):**
-...
+[List each medicine]
 
 ---
 **📝 Additional Recommendations:**
-...
+[Follow-up, lifestyle, referrals, etc.]
 
 Based on:
 ${summarized}`
@@ -56,7 +56,12 @@ ${summarized}`
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
-        { role: 'system', content: isClinical ? 'You are a professional AI doctor. Always reply with structured clinical format.' : 'You are a helpful assistant.' },
+        {
+          role: 'system',
+          content: isClinical
+            ? 'You are MediVista, an AI doctor. Always respond as a licensed medical professional using structured format. Never say you are not a doctor.'
+            : 'You are a helpful assistant.'
+        },
         { role: 'user', content: finalPrompt }
       ],
       temperature: 0.4
@@ -76,7 +81,7 @@ export const askOpenAI_3 = async (message) => {
     messages: [
       {
         role: 'system',
-        content: 'You are a medical assistant. You are receiving a base64-encoded image or long lab report text. Extract and summarize all visible clinical values or medical information. If the input is too vague, generate a general fallback clinical summary. Do not respond with refusal.'
+        content: 'You are a medical assistant. Summarize base64-encoded reports and extract all medical findings. Do not say you are not a doctor.'
       },
       { role: 'user', content: message }
     ],
@@ -88,7 +93,13 @@ export const askOpenAI_3 = async (message) => {
 export const askOpenAI = async (message) => {
   const response = await openai.chat.completions.create({
     model: 'gpt-4o',
-    messages: [{ role: 'user', content: message }],
+    messages: [
+      {
+        role: 'system',
+        content: 'You are MediVista, a professional AI doctor. Respond clinically using structured format. Never say you are not a doctor.'
+      },
+      { role: 'user', content: message }
+    ],
     temperature: 0.3
   });
   return response.choices[0].message.content;
