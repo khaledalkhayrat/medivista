@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5050',
+        target: 'https://backend-yyv2.onrender.com',
         changeOrigin: true,
         secure: false,
       },
