@@ -23,7 +23,7 @@ export async function dualGPTProcess(prompt) {
           { role: 'user', content: prompt }
         ]
       });
-      summarized = summaryResponse.choices[0].message.content;
+      summarized = summaryResponse?.choices?.[0]?.message?.content || prompt;
     }
 
     const isClinical = /symptom|diagnos|treatment|cbc|x[- ]?ray|mri|ultrasound|scan|infection|tumor|lab/i.test(summarized);
@@ -67,7 +67,8 @@ ${summarized}`
       temperature: 0.4
     });
 
-    return response.choices[0].message.content;
+    const reply = response?.choices?.[0]?.message?.content;
+    return reply || "⚠️ AI did not return a valid response.";
 
   } catch (error) {
     console.error('❌ dualGPTProcess Error:', error.message);
@@ -75,32 +76,3 @@ ${summarized}`
   }
 }
 
-export const askOpenAI_3 = async (message) => {
-  const response = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages: [
-      {
-        role: 'system',
-        content: 'You are a medical assistant. Summarize base64-encoded reports and extract all medical findings. Do not say you are not a doctor.'
-      },
-      { role: 'user', content: message }
-    ],
-    temperature: 0.3
-  });
-  return response.choices[0].message.content;
-};
-
-export const askOpenAI = async (message) => {
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4o',
-    messages: [
-      {
-        role: 'system',
-        content: 'You are MediVista, a professional AI doctor. Respond clinically using structured format. Never say you are not a doctor.'
-      },
-      { role: 'user', content: message }
-    ],
-    temperature: 0.3
-  });
-  return response.choices[0].message.content;
-};
