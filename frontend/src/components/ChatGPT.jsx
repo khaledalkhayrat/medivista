@@ -20,7 +20,7 @@ const ChatGPT = () => {
       });
 
       const reply = res?.data?.reply || "⚠️ No response from AI.";
-      console.log("🧠 AI Reply:", reply);
+      console.log("🔥 Full API Response:", res.data);
 
       if (reply) {
         setMessages([...newMessages, { role: 'assistant', content: reply }]);
